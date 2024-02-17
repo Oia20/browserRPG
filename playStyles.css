@@ -17,8 +17,16 @@ body {
     justify-content: center;
 }
 
-.img-container {
-    width:auto;
+.dragon {
     position:relative;
     text-align: center;
+    object-fit: contain;
+    width: 100%;
+}
+
+.txt {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
