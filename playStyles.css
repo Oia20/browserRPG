@@ -1,0 +1,24 @@
+body {
+    background-color:#0a0a23;
+    color: whitesmoke;
+    margin: 0px;
+}
+
+.text {
+    display: grid;
+    place-items: center;
+    align-items: center;
+    min-height:100vh;
+}
+
+.button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.img-container {
+    width:auto;
+    position:relative;
+    text-align: center;
+}
