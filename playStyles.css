@@ -8,25 +8,108 @@ body {
     display: grid;
     place-items: center;
     align-items: center;
-    min-height:100vh;
+    min-height:80vh;
 }
 
 .button {
+    background-color: #04AA6D; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
     display: flex;
-    align-items: center;
     justify-content: center;
 }
-
 .dragon {
     position:relative;
     text-align: center;
-    object-fit: contain;
+    object-fit:cover;
     width: 100%;
+    z-index: -2;
+    min-height: 100vh;
+}
+
+
+
+.img-container {
+    background: rgb(0,0,0);
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.26) 26%, rgb(10, 10, 35) 100%);
+    z-index: 1;
+}
+
+
+.logo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -40%);
+}
+
+@keyframes fadeInUp {
+    0% {
+      opacity: 1;
+    }
+    30%{
+        opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    70% {
+      opacity: 0;
+    }
+    100% {
+        opacity: 1;
+      }
+  }
+
+.onload {
+    position:fixed;
+    width:100%;
+    height: 100%;
+    background-color: #0a0a23;
+    z-index: 100;
+    opacity: 0;
+    animation: 6s fadeInUp;
+    pointer-events: none;
+
+    /* visibility: hidden; */
 }
 
 .txt {
     position: absolute;
-    top: 50%;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -40%);
+    animation: 9s fadeIn;
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 50px;
+
+}
+
+.txt1 {
+    position: absolute;
+    top: 54%;
     left: 50%;
     transform: translate(-50%, -50%);
+    animation: 11s fadeIn;
+}
+
+.logoMain {
+    position: fixed;
+    height:150px;
+    width:150px;
+    padding-left: 20px;
+}
+
+a {
+    color:azure
 }
