@@ -4,12 +4,6 @@ body {
     margin: 0px;
 }
 
-.text {
-    display: grid;
-    place-items: center;
-    align-items: center;
-    min-height:80vh;
-}
 
 .button {
     background-color: #04AA6D; /* Green */
@@ -112,4 +106,44 @@ body {
 
 a {
     color:azure
+}
+
+.a-browser-rpg-txt {
+    font-size: 70px;
+    color: rgb(201, 160, 58);
+    z-index: 20;
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -40%);
+    animation: 9s fadeIn;
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    text-shadow: 2px 2px 4px black;
+}
+
+.text {
+    display: grid;
+    place-items: center;
+    align-items: center;
+    min-height:30vh;
+    opacity: 0;
+    filter: blur(5px);
+    transform: translateX(-100%);
+    transition: all 3s;
+    font-size: 70px;
+    color: rgb(201, 160, 58);
+    text-shadow: 6px 6px 12px black;
+
+}
+
+.show {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateX(0);
+}
+
+@media(prefers-reduced-motion){
+    .show {
+        transition: none;
+    }
 }
