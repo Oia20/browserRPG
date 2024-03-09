@@ -1,0 +1,63 @@
+.box {
+    width: 80%;
+    height: 90vh;
+    background-color:#344955;
+    align-self: center;
+    margin: auto;
+    border: medium solid #78A083;
+    border-radius: 10px;
+}
+
+.coins {
+    height: 30px;
+    width: 30px;
+    position: static;
+    object-position: right top;  
+    float: right;
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: large;
+}
+
+.mobs {
+    height: 100px;
+    width: 100px;
+    display: flex;
+    height: 100%;
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+.monsterimg {
+    display: flex;
+    height: 75px;
+    width: 75px;
+    border-radius: 50%;
+}
+
+.monster {
+    width: 30vh;
+    height: 20vh;
+    background-color: #50727B;
+    margin: 10px;
+    display: flex;
+    flex-direction: column; /* Update to column for vertical alignment */
+    align-items: flex-start; /* Align items at the start (top) of the column */
+    border: medium solid #78A083;
+    border-radius: 25% 10%;
+}
+
+.monster h1 {
+    display: inline-block;
+    text-align: center;
+    vertical-align: top;
+    margin: 0px;
+}
+
+.level {
+    display: block;
+    margin: 0px;
+    margin-top: 10px
+}
