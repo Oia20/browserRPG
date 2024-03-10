@@ -61,3 +61,8 @@
     margin: 0px;
     margin-top: 10px
 }
+
+.monster:hover {
+    background-color: #344955;
+    cursor: pointer;
+}
