@@ -5,7 +5,6 @@ import Modal from 'react-modal';
 let xp = 0;
 let currentWeapon = 0;
 let fighting;
-let monsterHealth;
 let inventory = ["stick"];
 // Right now the bug is happening because monsterHealth is NAN.
 const monsters = [
@@ -64,7 +63,7 @@ function Box() {
   const [selectedMonster, setSelectedMonster] = useState(true);
   let [health, setHealth] = useState(100);
   let [gold, setGold] = useState(50);
-  let [monsterHealth, setMonsterHealth] = useState(selectedMonster.health);
+  let [monsterHealth, setMonsterHealth] = useState(5);
   function buyHealth() {
     if (gold >= 10) {
       setGold(gold - 10);
@@ -77,7 +76,7 @@ function Box() {
   function attack() {
     // fighting = selectedMonster
     setHealth(health - getMonsterAttackValue(selectedMonster.level));
-    setMonsterHealth(selectedMonster.health - selectedMonster.health - weapons[currentWeapon].power + Math.floor(Math.random() * xp) + 1);    
+    setMonsterHealth(monsterHealth - weapons[currentWeapon].power + Math.floor(Math.random() * xp) + 1);    
     // } else {
     //   text.innerText += " You miss.";
     // }
@@ -101,6 +100,10 @@ function getMonsterAttackValue(level) {
 function isMonsterHit() {
   return Math.random() > .2 || health < 20;
 }
+function monstHealth(monster) {
+  setMonsterHealth(monster.health)
+}
+
 function Cave() {
   const monsterList = monsters.map((monster) => {
     return  <div className='monster' onClick={() => openFightModal(monster)}>
@@ -134,8 +137,9 @@ function Cave() {
   };
   //Fight modal open and close
   const openFightModal = (monster) => {
-    setFightModalIsOpen(true);
     setSelectedMonster(monster); // Store the selected monster in the state
+    monstHealth(monster)
+    setFightModalIsOpen(true);
   };
 
   const closeFightModal = () => {
@@ -158,7 +162,7 @@ function Cave() {
         onRequestClose={closeFightModal}
         contentLabel="Fight Modal"
         style={modalStyles} // Apply the custom 
-      > 
+      >  
         {<h1>Fight!</h1>}
         {/* problem is here!!!!!!!!!!!!!!!!!!!! */}
         <h1>{selectedMonster.name}</h1>
