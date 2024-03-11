@@ -7,7 +7,7 @@ let currentWeapon = 0;
 let fighting;
 let monsterHealth;
 let inventory = ["stick"];
-
+// Right now the bug is happening because monsterHealth is NAN.
 const monsters = [
   {
     name: "slime",
@@ -32,7 +32,12 @@ const monsters = [
   }
 ]
 
-
+const weapons = [
+  { name: 'stick', power: 5 },
+  { name: 'dagger', power: 30 },
+  { name: 'claw hammer', power: 50 },
+  { name: 'sword', power: 100 }
+];
 
 // function Cave() {
 //   const monsterList = monsters.map((monster) => {
@@ -56,9 +61,10 @@ const monsters = [
 function Box() {
   const [modalFightIsOpen, setFightModalIsOpen] = useState(false);
   const [modalShopIsOpen, setShopModalIsOpen] = useState(false);
-  const [selectedMonster, setSelectedMonster] = useState(null);
+  const [selectedMonster, setSelectedMonster] = useState(true);
   let [health, setHealth] = useState(100);
   let [gold, setGold] = useState(50);
+  let [monsterHealth, setMonsterHealth] = useState(selectedMonster.health);
   function buyHealth() {
     if (gold >= 10) {
       setGold(gold - 10);
@@ -68,6 +74,33 @@ function Box() {
     }
   }
   
+  function attack() {
+    // fighting = selectedMonster
+    setHealth(health - getMonsterAttackValue(selectedMonster.level));
+    setMonsterHealth(selectedMonster.health - selectedMonster.health - weapons[currentWeapon].power + Math.floor(Math.random() * xp) + 1);    
+    // } else {
+    //   text.innerText += " You miss.";
+    // }
+    if (health <= 0) {
+      lose();
+    } else if (monsterHealth <= 0) {
+      if (fighting === 2) {
+        winGame();
+      } else {
+        defeatMonster();
+      }
+    }
+}
+
+function getMonsterAttackValue(level) {
+  const hit = (level * 5) - (Math.floor(Math.random() * xp));
+  console.log(hit);
+  return hit > 0 ? hit : 0;
+}
+
+function isMonsterHit() {
+  return Math.random() > .2 || health < 20;
+}
 function Cave() {
   const monsterList = monsters.map((monster) => {
     return  <div className='monster' onClick={() => openFightModal(monster)}>
@@ -123,13 +156,15 @@ function Cave() {
       <Modal
         isOpen={modalFightIsOpen}
         onRequestClose={closeFightModal}
-        contentLabel="Shop Modal"
-        style={modalStyles} // Apply the custom styles
-      >
+        contentLabel="Fight Modal"
+        style={modalStyles} // Apply the custom 
+      > 
         {<h1>Fight!</h1>}
         {/* problem is here!!!!!!!!!!!!!!!!!!!! */}
-        {/* <h1> {Monster.name}</h1> */}
-        <button>Attack</button>
+        <h1>{selectedMonster.name}</h1>
+        <h1>Health: {monsterHealth}</h1>
+
+        <button onClick={attack}>Attack</button>
         <div className='coins'>
           <img src='Coin.png' className='coins' alt='coins'/>
           {gold}
@@ -137,6 +172,7 @@ function Cave() {
         </div>
         <button onClick={closeFightModal}>Close Fight</button>
       </Modal>
+
       {/* Modal for the shop */}
       <Modal
         isOpen={modalShopIsOpen}
