@@ -1,8 +1,7 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './box.css'
 import Modal from 'react-modal';
 
-let xp = 0;
 let currentWeapon = 0;
 let fighting;
 let inventory = ["stick"];
@@ -64,6 +63,8 @@ function Box() {
   let [health, setHealth] = useState(100);
   let [gold, setGold] = useState(50);
   let [monsterHealth, setMonsterHealth] = useState(5);
+  let [xp, setXp] = useState(0);
+
   function buyHealth() {
     if (gold >= 10) {
       setGold(gold - 10);
@@ -74,25 +75,27 @@ function Box() {
   }
   
   function attack() {
-    // fighting = selectedMonster
     setHealth(health - getMonsterAttackValue(selectedMonster.level));
-    setMonsterHealth(monsterHealth - weapons[currentWeapon].power + Math.floor(Math.random() * xp) + 1);    
-    // } else {
-    //   text.innerText += " You miss.";
-    // }
-    if (health <= 0) {
-      lose();
-    } else if (monsterHealth <= 0) {
-      if (fighting === 2) {
-        winGame();
-      } else {
-        defeatMonster();
-      }
-    }
+    //Health is increasing as xp goes up for some reason.
+    setMonsterHealth(monsterHealth - weapons[currentWeapon].power + Math.floor(Math.random() * xp) + 1);
 }
 
-function getMonsterAttackValue(level) {
-  const hit = (level * 5) - (Math.floor(Math.random() * xp));
+useEffect(() => {
+  if (parseInt(monsterHealth) <= 0) {
+    defeatMonster();
+    closeFightModal()
+    setMonsterHealth(1)
+  }
+})
+
+function defeatMonster() {
+  setGold(gold += Math.floor(selectedMonster.level * 6.7));
+  setXp(xp + selectedMonster.level);
+  return
+}
+
+function getMonsterAttackValue() {
+  const hit = (selectedMonster.level * 5) - (Math.floor(Math.random() * xp));
   console.log(hit);
   return hit > 0 ? hit : 0;
 }
@@ -167,6 +170,7 @@ function Cave() {
         {/* problem is here!!!!!!!!!!!!!!!!!!!! */}
         <h1>{selectedMonster.name}</h1>
         <h1>Health: {monsterHealth}</h1>
+        <h1>xp: {xp}</h1>
 
         <button onClick={attack}>Attack</button>
         <div className='coins'>
