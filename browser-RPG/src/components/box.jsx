@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import './box.css'
 import Modal from 'react-modal';
 
-let currentWeapon = 0;
 let fighting;
 let inventory = ["stick"];
 // Right now the bug is happening because monsterHealth is NAN.
@@ -30,31 +29,12 @@ const monsters = [
   }
 ]
 
-const weapons = [
-  { name: 'stick', power: 5 },
-  { name: 'dagger', power: 30 },
-  { name: 'claw hammer', power: 50 },
-  { name: 'sword', power: 100 }
+const weaponsList = [
+  { name: 'stick', power: 5, cost: 0, index: 0},
+  { name: 'dagger', power: 10, cost: 50, index: 1},
+  { name: 'claw hammer', power: 25, cost: 250, index: 2},
+  { name: 'sword', power: 50, cost: 500, index: 3}
 ];
-
-// function Cave() {
-//   const monsterList = monsters.map((monster) => {
-//     return  <div className='monster'>
-//               <img className="monsterimg"src={monster.img}/>
-//               <h1>{monster.name}</h1>
-//               <h3 className='level'>Level: {monster.level}</h3>
-//               <h3 className='level'>Health: {monster.health}</h3>
-//               {/* <span>{monster.desc}</span> */}
-//             </div> 
-//   })
-//   return (
-//     <>
-//       <div className='mobs'>
-//         {monsterList}
-//       </div>
-//     </>
-//   )
-// }
 
 function Box() {
   const [modalFightIsOpen, setFightModalIsOpen] = useState(false);
@@ -64,6 +44,10 @@ function Box() {
   let [gold, setGold] = useState(50);
   let [monsterHealth, setMonsterHealth] = useState(5);
   let [xp, setXp] = useState(0);
+  let [currentWeapon, setCurrentWeapon] = useState(0);
+  let [weaponName, setWeaponName] = useState("Stick");
+
+
 
   function buyHealth() {
     if (gold >= 10) {
@@ -77,7 +61,7 @@ function Box() {
   function attack() {
     setHealth(health - getMonsterAttackValue(selectedMonster.level));
     //Health is increasing as xp goes up for some reason.
-    setMonsterHealth(monsterHealth - weapons[currentWeapon].power + Math.floor(Math.random() * xp) + 1);
+    setMonsterHealth(monsterHealth - (weaponsList[currentWeapon].power + Math.floor(Math.random() * xp)) + 1);
 }
 
 useEffect(() => {
@@ -88,6 +72,16 @@ useEffect(() => {
   }
 })
 
+const buyWeapon = (weapon) => {
+  if (gold >= weapon.cost) {
+    setCurrentWeapon(weapon.index)
+    setWeaponName(weapon.name)
+    setGold(gold - weapon.cost)
+  } else {
+    alert("You do not have enough gold.")
+  }
+}
+
 function defeatMonster() {
   setGold(gold += Math.floor(selectedMonster.level * 6.7));
   setXp(xp + selectedMonster.level);
@@ -96,7 +90,6 @@ function defeatMonster() {
 
 function getMonsterAttackValue() {
   const hit = (selectedMonster.level * 5) - (Math.floor(Math.random() * xp));
-  console.log(hit);
   return hit > 0 ? hit : 0;
 }
 
@@ -121,6 +114,24 @@ function Cave() {
     <>
       <div className='mobs'>
         {monsterList}
+      </div>
+    </>
+  )
+}
+
+function Weapons() {
+  const weaponsful = weaponsList.map((weapon) => {
+    return  <div className='monster'  onClick={() => buyWeapon(weapon)}>
+              <h1>{weapon.name}</h1>
+              <h3 className='level'>Power: {weapon.power}</h3>
+              <h3>Cost: {weapon.cost}</h3>
+              <h3>Current max hit with weapon: {weapon.power + xp + 1}</h3>
+            </div> 
+  })
+  return (
+    <>
+      <div className='mobs'>
+        {weaponsful}
       </div>
     </>
   )
@@ -167,7 +178,6 @@ function Cave() {
         style={modalStyles} // Apply the custom 
       >  
         {<h1>Fight!</h1>}
-        {/* problem is here!!!!!!!!!!!!!!!!!!!! */}
         <h1>{selectedMonster.name}</h1>
         <h1>Health: {monsterHealth}</h1>
         <h1>xp: {xp}</h1>
@@ -189,7 +199,8 @@ function Cave() {
         style={modalStyles} // Apply the custom styles
       >
         {<h1>Shop!</h1>}
-        <button>Buy weapon</button>
+        <h1>Current Weapon: {weaponName}</h1>
+        <Weapons/>
         <button onClick={buyHealth}>Buy health</button>
         <div className='coins'>
           <img src='Coin.png' className='coins' alt='coins'/>
