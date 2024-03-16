@@ -7,34 +7,55 @@ let inventory = ["stick"];
 // Right now the bug is happening because monsterHealth is NAN.
 const monsters = [
   {
-    name: "slime",
+    name: "Slime",
     level: 2,
     health: 15,
     img: "openart-image_vGzNhgmG_1709936915516_raw.jpg",
     desc: "A cute, yet feisty slime prepared to fight anyone in his way."
   },
   {
-    name: "fanged beast",
+    name: "Fanged Beast",
     level: 8,
     health: 60,
     img: "fangedBeast.jpg",
     desc: "A cute, yet feisty slime prepared to fight anyone in his way."
   },
   {
-    name: "mad engineer",
+    name: "Mad Engineer",
     level: 20,
     health: 300,
     img: "Mad Engineer.jpg",
+    desc: "A cute, yet feisty slime prepared to fight anyone in his way."
+  },
+  {
+    name: "Baby Dragon",
+    level: 50,
+    health: 2000,
+    img: "babydrag.jpg",
+    desc: "A cute, yet feisty slime prepared to fight anyone in his way."
+  },
+  {
+    name: "Final Momma Dragon",
+    level: 250,
+    health: 10000,
+    img: "adultdrag.jpg",
     desc: "A cute, yet feisty slime prepared to fight anyone in his way."
   }
 ]
 
 const weaponsList = [
-  { name: 'stick', power: 5, cost: 0, index: 0},
-  { name: 'dagger', power: 10, cost: 50, index: 1},
-  { name: 'claw hammer', power: 25, cost: 250, index: 2},
-  { name: 'sword', power: 50, cost: 500, index: 3}
+  { name: 'stick', power: 5, cost: 0, index: 0, img: "stick.jpg"},
+  { name: 'dagger', power: 10, cost: 50, index: 1, img: "daggers.jpg"},
+  { name: 'claw hammer', power: 25, cost: 250, index: 2, img: "hammer.jpg"},
+  { name: 'sword', power: 50, cost: 500, index: 3, img: "sword.jpg"}
 ];
+
+const consumableList = [
+  {name: "10 Health", health: 10, cost: 10},
+  {name: "25 Health", health: 25, cost: 25},
+  {name: "50 Health", health: 50, cost: 50},
+  {name: "100 Health", health: 100, cost: 100},
+]
 
 function Box() {
   const [modalFightIsOpen, setFightModalIsOpen] = useState(false);
@@ -49,10 +70,10 @@ function Box() {
 
 
 
-  function buyHealth() {
-    if (gold >= 10) {
-      setGold(gold - 10);
-      setHealth(health + 10);
+  function buyHealth(consumable) {
+    if (gold >= consumable.cost) {
+      setGold(gold - consumable.cost);
+      setHealth(health + consumable.health);
     } else {
       alert("Sorry you don't have enough gold.")
     }
@@ -64,11 +85,22 @@ function Box() {
     setMonsterHealth(monsterHealth - (weaponsList[currentWeapon].power + Math.floor(Math.random() * xp)) + 1);
 }
 
+  function defeat() {
+    alert("You have died. Restarting game.")
+    setHealth(100)
+    setGold(50)
+    setXp(0)
+    setCurrentWeapon(0)
+  }
 useEffect(() => {
   if (parseInt(monsterHealth) <= 0) {
     defeatMonster();
     closeFightModal()
     setMonsterHealth(1)
+  }
+  if (health <= 0) {
+    defeat()
+    closeFightModal()
   }
 })
 
@@ -112,7 +144,12 @@ function Cave() {
   })
   return (
     <>
+
       <div className='mobs'>
+      <div className='monster' onClick={openShopModal}>
+      <img className="monsterimg"src={"shop.jpg"}/>
+      <h1>Shop</h1>
+      </div>
         {monsterList}
       </div>
     </>
@@ -121,21 +158,45 @@ function Cave() {
 
 function Weapons() {
   const weaponsful = weaponsList.map((weapon) => {
-    return  <div className='monster'  onClick={() => buyWeapon(weapon)}>
-              <h1>{weapon.name}</h1>
-              <h3 className='level'>Power: {weapon.power}</h3>
-              <h3>Cost: {weapon.cost}</h3>
-              <h3>Current max hit with weapon: {weapon.power + xp + 1}</h3>
-            </div> 
-  })
+    return (
+      <div className='monster' onClick={() => buyWeapon(weapon)} key={weapon.index}>
+        <img className="monsterimg"src={weapon.img}/>
+        <h1>{weapon.name}</h1>
+        <h3 className='level'>Power: {weapon.power}</h3>
+        <h3>Cost: {weapon.cost}</h3>
+        <h3>Current max hit with weapon: {weapon.power + xp + 1}</h3>
+      </div>
+    );
+  });
+
+  const consumablesful = consumableList.map((consumable) => {
+    return (
+      <div className='monster' onClick={() => buyHealth(consumable)} key={consumable.name}>
+      <img className="monsterimg"src={"health.jpg"}/>
+        <h1>{consumable.name}</h1>
+        <h3>Health: +{consumable.health}</h3>
+        <h3>Cost: {consumable.cost}</h3>
+      </div>
+    );
+  });
+
   return (
     <>
       <div className='mobs'>
         {weaponsful}
+        {consumablesful}
+        <div className='monster' onClick={closeShopModal}>
+        <img className="monsterimg"src={"cave.jpg"}/>
+        <h1>Return</h1>
       </div>
+      </div>
+      {/* <div className='consumables'>
+        <h2>Consumables</h2>
+      </div> */}
     </>
-  )
+  );
 }
+
   //Shop modal open/close
   const openShopModal = () => {
     setShopModalIsOpen(true);
@@ -146,7 +207,7 @@ function Weapons() {
   };
   const modalStyles = {
     content: {
-      backgroundColor: '#50727B', // Set your desired background color here
+      backgroundColor: '#344955', // Set your desired background color here
     },
   };
   //Fight modal open and close
@@ -161,11 +222,10 @@ function Weapons() {
   };
   return (
     <>
-      <button onClick={openShopModal}>Shop</button>
       <div className="box">
         <div className='coins'>
           <img src='Coin.png' className='coins' alt='coins'/>
-          {gold}
+          <span>{gold}</span>
           <span>Health: {health}</span>
         </div>
         <Cave/>
@@ -179,8 +239,8 @@ function Weapons() {
       >  
         {<h1>Fight!</h1>}
         <h1>{selectedMonster.name}</h1>
-        <h1>Health: {monsterHealth}</h1>
-        <h1>xp: {xp}</h1>
+        <h1>Enemy Health: {monsterHealth}</h1>
+        <h1>Your XP: {xp}</h1>
 
         <button onClick={attack}>Attack</button>
         <div className='coins'>
@@ -200,14 +260,12 @@ function Weapons() {
       >
         {<h1>Shop!</h1>}
         <h1>Current Weapon: {weaponName}</h1>
-        <Weapons/>
-        <button onClick={buyHealth}>Buy health</button>
         <div className='coins'>
           <img src='Coin.png' className='coins' alt='coins'/>
           {gold}
           <span>Health: {health}</span>
         </div>
-        <button onClick={closeShopModal}>Close Shop</button>
+        <Weapons/>
       </Modal>
     </>
   );

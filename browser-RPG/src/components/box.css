@@ -1,6 +1,6 @@
 .box {
     width: 80%;
-    height: 90vh;
+    height: 100%;
     background-color:#344955;
     align-self: center;
     margin: auto;
@@ -11,23 +11,22 @@
 .coins {
     height: 30px;
     width: 30px;
-    position: static;
+    position: sticky;
     object-position: right top;  
     float: right;
     padding: 5px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    font-size: large;
+    font-size: 30px;
 }
 
 .mobs {
-    height: 100px;
-    width: 100px;
     display: flex;
-    height: 100%;
     width: 100%;
     flex-wrap: wrap;
+    justify-content: space-evenly;
+    row-gap: 0px;
 }
 
 .monsterimg {
@@ -63,6 +62,32 @@
 }
 
 .monster:hover {
-    background-color: #344955;
+    background-color: #78A083;
     cursor: pointer;
+    border: 5px solid #50727B;
+}
+
+.shop {
+    width: 100vh;
+    height: 20vh;
+    background-color: #50727B;
+    margin: 10px;
+    display: flex;
+    flex-direction: column; /* Update to column for vertical alignment */
+    align-items: flex-start; /* Align items at the start (top) of the column */
+    border: medium solid #78A083;
+    border-radius: 25% 10%;
+}
+
+.shop:hover {
+    background-color: #78A083;
+    cursor: pointer;
+    border: 5px solid #50727B;
+}
+
+.monster h3 {
+    display: inline-block;
+    text-align: center;
+    vertical-align: top;
+    margin: 0px;
 }
