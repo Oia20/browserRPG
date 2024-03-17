@@ -60,6 +60,8 @@ const consumableList = [
 function Box() {
   const [modalFightIsOpen, setFightModalIsOpen] = useState(false);
   const [modalShopIsOpen, setShopModalIsOpen] = useState(false);
+  const [modalKillIsOpen, setKillModalIsOpen] = useState(false);
+  const [modalWinIsOpen, setWinModalIsOpen] = useState(false);
   const [selectedMonster, setSelectedMonster] = useState(true);
   let [health, setHealth] = useState(100);
   let [gold, setGold] = useState(50);
@@ -117,6 +119,11 @@ const buyWeapon = (weapon) => {
 function defeatMonster() {
   setGold(gold += Math.floor(selectedMonster.level * 6.7));
   setXp(xp + selectedMonster.level);
+  if (selectedMonster.level == 250) {
+    openWinModal()
+  } else{
+    openKillModal()
+  }
   return
 }
 
@@ -220,17 +227,58 @@ function Weapons() {
   const closeFightModal = () => {
     setFightModalIsOpen(false);
   };
+
+//kill modal open/close
+  const openKillModal = () => {
+    setKillModalIsOpen(true);
+  };
+
+  const closeKillModal = () => {
+    setKillModalIsOpen(false);
+  };
+  //win modal open/close
+  const openWinModal = () => {
+    setWinModalIsOpen(true);
+  };
+
+  const closeWinModal = () => {
+    setWinModalIsOpen(false);
+  };
   return (
     <>
-      <div className="box">
-        <div className='coins'>
-          <img src='Coin.png' className='coins' alt='coins'/>
-          <span>{gold}</span>
-          <span>Health: {health}</span>
+        <div className='coinsBox'>
+          <div className='coins'>
+            <img src='Coin.png' className='coins' alt='coins'/>
+            <span>{gold}</span>
+            <span>Health: {health}</span>
+          </div>
         </div>
+      <div className="box">
+
         <Cave/>
       {/* Modal for the Fighting */}
       </div>
+            {/* Modal for the kill monster */}
+      <Modal
+        isOpen={modalKillIsOpen}
+        onRequestClose={closeKillModal}
+        contentLabel="Shop Modal"
+        style={modalStyles} // Apply the custom styles
+      >
+        <h1 className='killedX'>You killed the {selectedMonster.name}</h1>
+        <h2 className='killedX'>Gaining: {Math.floor(selectedMonster.level * 6.7)} Gold and {selectedMonster.level} XP. </h2>
+        <div className='returnDiv' onClick={closeKillModal}><h1>return</h1></div>
+      </Modal>
+      {/* Modal for winning the game */}
+      <Modal
+        isOpen={modalWinIsOpen}
+        onRequestClose={closeWinModal}
+        contentLabel="Shop Modal"
+        style={modalStyles} // Apply the custom styles
+      >
+        <div className='returnDiv' onClick={closeWinModal}><h1>You have beat the game. Click here to continue.</h1></div>
+      </Modal>
+
       <Modal
         isOpen={modalFightIsOpen}
         onRequestClose={closeFightModal}
@@ -267,6 +315,8 @@ function Weapons() {
         </div>
         <Weapons/>
       </Modal>
+
+
     </>
   );
 }

@@ -91,3 +91,41 @@
     vertical-align: top;
     margin: 0px;
 }
+
+.killedX {
+    text-align: center;
+    font-size:2.5rem;
+}
+
+.returnDiv {
+    width: max-content;
+    height: 10%;
+    background-color: #78A083;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    border:5px solid #50727B;
+}
+
+.returnDiv:hover {
+    background-color: #50727B;
+    border:5px solid #78A083;
+    cursor: pointer;
+}
+
+.coinsBox {
+    height: 200px;
+    width: 80px;
+    background-color: #78A083;
+    position: fixed;
+    float: right;
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 30px;
+    top: 10px;
+    right: 10px;
+    border-radius: 10px;
+}
