@@ -38,7 +38,7 @@
 
 .monster {
     width: 30vh;
-    height: 20vh;
+    height:max-content;
     background-color: #50727B;
     margin: 10px;
     display: flex;
