@@ -7,6 +7,6 @@ All of the images are AI generated.
 
 I'm open to any expansions on this project, so if you're interested, fork and make updates!
 
-The original project looked like this: 
+The original project looked like this: https://oia20.github.io/originalBrowserRPG/
 
 color pallet link: https://colorhunt.co/palette/35374b34495550727b78a083
